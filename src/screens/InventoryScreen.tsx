@@ -137,10 +137,14 @@ export const InventoryScreen = () => {
 					<h1 className="text-gradient">Inventory</h1>
 					<p>Track your materials and equipment stock</p>
 				</div>
-				<button className="primary-btn" style={{ width: 'auto' }} onClick={() => setIsModalOpen(true)}>
+				<button className="primary-btn hide-mobile" style={{ width: 'auto' }} onClick={() => setIsModalOpen(true)}>
 					<Plus size={20} /> Add New Item
 				</button>
 			</header>
+
+			<div className="mobile-fab" onClick={() => setIsModalOpen(true)}>
+				<Plus size={24} />
+			</div>
 
 			<div className="inventory-summary-grid">
 				<div className="card mini-stat-card">
@@ -235,7 +239,10 @@ export const InventoryScreen = () => {
 								<input
 									type="text"
 									value={formatNumber(formData.quantity)}
-									onChange={(e) => setFormData({ ...formData, quantity: e.target.value.replace(/,/g, '') })}
+									onChange={(e) => {
+										const val = e.target.value.replace(/[^0-9]/g, '');
+										setFormData({ ...formData, quantity: val });
+									}}
 									required
 								/>
 							</div>
@@ -262,7 +269,10 @@ export const InventoryScreen = () => {
 								<input
 									type="text"
 									value={formatNumber(formData.costPrice)}
-									onChange={(e) => setFormData({ ...formData, costPrice: e.target.value.replace(/,/g, '') })}
+									onChange={(e) => {
+										const val = e.target.value.replace(/[^0-9]/g, '');
+										setFormData({ ...formData, costPrice: val });
+									}}
 									placeholder="0.00"
 								/>
 							</div>
@@ -271,7 +281,10 @@ export const InventoryScreen = () => {
 								<input
 									type="text"
 									value={formatNumber(formData.reorderLevel)}
-									onChange={(e) => setFormData({ ...formData, reorderLevel: e.target.value.replace(/,/g, '') })}
+									onChange={(e) => {
+										const val = e.target.value.replace(/[^0-9]/g, '');
+										setFormData({ ...formData, reorderLevel: val });
+									}}
 									placeholder="Notify at..."
 								/>
 							</div>

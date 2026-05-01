@@ -42,11 +42,11 @@ export const RegisterScreen = () => {
 		<div className="auth-page-container">
 			<div className="card auth-card-luxury" style={{ maxWidth: '500px' }}>
 				<div className="auth-logo-section">
-					<div className="auth-logo-circle">
-						<Scissors size={32} color="white" />
+					<div className="auth-logo-circle" style={{ padding: 0, overflow: 'hidden' }}>
+						<img src="/logo.png" alt="Seamly" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
 					</div>
-					<h1 className="auth-title">Create Account</h1>
-					<p className="auth-subtitle">Join thousands of professional tailors</p>
+					<h1 className="auth-title">Join Seamly</h1>
+					<p className="auth-subtitle">Premium Management for Professional Tailors</p>
 				</div>
 
 				{error && (

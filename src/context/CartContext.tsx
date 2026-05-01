@@ -24,12 +24,12 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [cart, setCart] = useState<CartItem[]>(() => {
-		const saved = localStorage.getItem('arcseams_cart');
+		const saved = localStorage.getItem('seamly_cart');
 		return saved ? JSON.parse(saved) : [];
 	});
 
 	useEffect(() => {
-		localStorage.setItem('arcseams_cart', JSON.stringify(cart));
+		localStorage.setItem('seamly_cart', JSON.stringify(cart));
 	}, [cart]);
 
 	const addToCart = (item: CartItem) => {

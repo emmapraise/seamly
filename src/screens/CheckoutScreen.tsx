@@ -117,7 +117,7 @@ export const CheckoutScreen = () => {
 			<header className="page-header-luxury animate-fade-in">
 				<div>
 					<button className="back-button" onClick={() => navigate(-1)} style={{ marginBottom: '1rem' }}>
-						<ArrowLeft size={20} /> Back
+						<ArrowLeft size={20} />
 					</button>
 					<h1 className="text-gradient">Studio Settlement</h1>
 					<p>Finalize production jobs and process client payments</p>
