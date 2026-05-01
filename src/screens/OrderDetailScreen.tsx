@@ -135,7 +135,7 @@ export const OrderDetailScreen = () => {
 		<div className="order-detail-screen-layout">
 			<div className="detail-header-row">
 				<button className="back-button" onClick={() => navigate(-1)}>
-					<ArrowLeft size={20} /> Back
+					<ArrowLeft size={20} />
 				</button>
 				<div className="header-actions">
 					<button className="secondary hide-mobile" onClick={() => window.print()}>
@@ -184,7 +184,24 @@ export const OrderDetailScreen = () => {
 							</div>
 						</div>
 
-						<div className="section-group">
+
+						{/* Mobile-only quick status changer */}
+						<div className="mobile-status-changer show-mobile">
+							<label className="mobile-status-label">
+								<Activity size={16} /> Update Production Status
+							</label>
+							<select
+								value={order.status || 'Pending'}
+								onChange={(e) => updateStatus(e.target.value)}
+								className="mobile-status-select"
+							>
+								{['Pending', 'Cutting', 'Stitching', 'Fitting', 'Finishing', 'Ready', 'Delivered', 'Cancelled'].map(s => (
+									<option key={s} value={s}>{s}</option>
+								))}
+							</select>
+						</div>
+
+						<div className="section-group hide-mobile">
 							<h3 className="group-title"><Activity size={20} color="var(--primary-color)" /> Production Workflow</h3>
 							<div className="workflow-stepper">
 								{[
@@ -270,7 +287,7 @@ export const OrderDetailScreen = () => {
 					<div className="sidebar-card measurements-sidebar">
 						<div className="flex-between" style={{ marginBottom: '1.5rem' }}>
 							<h3 style={{ margin: 0, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 800 }}>Measurements</h3>
-							<button className="text-btn" onClick={() => customer && navigate(`/clients/${customer.id}/measurements/edit`)} disabled={!customer}>Manage</button>
+							<button className="btn-ghost" onClick={() => customer && navigate(`/clients/${customer.id}/measurements/edit`)} disabled={!customer}>Manage</button>
 						</div>
 						<div className="m-sidebar-list">
 							{measurements ? Object.entries(measurements).map(([key, value]) => (

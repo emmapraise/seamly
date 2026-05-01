@@ -22,24 +22,28 @@ export const Layout = () => {
 			<aside className="sidebar">
 				<div className="sidebar-header">
 					<div className="flex items-center gap-3">
-						<div style={{ background: 'var(--primary-color)', padding: '0.5rem', borderRadius: '10px' }}>
-							<Scissors size={20} color="white" />
-						</div>
-						<h2 className="text-gradient" style={{ margin: 0 }}>Arcseams</h2>
+						<img src="/logo.png" alt="Seamly Logo" style={{ width: '32px', height: '32px', borderRadius: '6px' }} />
+						<h2 className="text-gradient" style={{ margin: 0 }}>Seamly</h2>
 					</div>
 				</div>
 
 				<nav className="sidebar-nav">
-					{links.map((link) => (
-						<Link
-							key={link.path}
-							to={link.path}
-							className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
-						>
-							{link.icon}
-							<span>{link.label}</span>
-						</Link>
-					))}
+					{links.map((link) => {
+						const isActive = link.path === '/' 
+							? location.pathname === '/' 
+							: location.pathname.startsWith(link.path);
+							
+						return (
+							<Link
+								key={link.path}
+								to={link.path}
+								className={`nav-link ${isActive ? 'active' : ''}`}
+							>
+								{link.icon}
+								<span>{link.label}</span>
+							</Link>
+						);
+					})}
 				</nav>
 
 				<div className="sidebar-footer">
@@ -68,16 +72,22 @@ export const Layout = () => {
 
 			{/* Bottom Nav for Mobile */}
 			<nav className="bottom-nav">
-				{links.map((link) => (
-					<Link
-						key={link.path}
-						to={link.path}
-						className={`bottom-nav-link ${location.pathname === link.path ? 'active' : ''}`}
-					>
-						{link.icon}
-						<span>{link.label}</span>
-					</Link>
-				))}
+				{links.map((link) => {
+					const isActive = link.path === '/' 
+						? location.pathname === '/' 
+						: location.pathname.startsWith(link.path);
+						
+					return (
+						<Link
+							key={link.path}
+							to={link.path}
+							className={`bottom-nav-link ${isActive ? 'active' : ''}`}
+						>
+							{link.icon}
+							<span>{link.label}</span>
+						</Link>
+					);
+				})}
 			</nav>
 		</div>
 	);

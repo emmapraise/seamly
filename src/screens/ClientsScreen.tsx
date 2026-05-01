@@ -143,10 +143,14 @@ export const ClientsScreen = () => {
 					<h1 className="text-gradient">Clients</h1>
 					<p>Search and manage your customer profiles</p>
 				</div>
-				<button className="primary-btn" style={{ width: 'auto' }} onClick={() => setIsModalOpen(true)}>
+				<button className="primary-btn hide-mobile" style={{ width: 'auto' }} onClick={() => setIsModalOpen(true)}>
 					<Plus size={20} /> Add New Client
 				</button>
 			</header>
+
+			<div className="mobile-fab" onClick={() => setIsModalOpen(true)}>
+				<Plus size={24} />
+			</div>
 
 			<div className="search-container">
 				<Search className="search-icon" size={20} />

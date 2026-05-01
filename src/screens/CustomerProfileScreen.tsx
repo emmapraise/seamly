@@ -95,14 +95,14 @@ export const CustomerProfileScreen = () => {
 
 	const handleWhatsApp = () => {
 		if (customer?.phone) {
-			const message = `Hello ${customer.firstName}, this is Arcseams regarding your tailoring order...`;
+			const message = `Hello ${customer.firstName}, this is Seamly regarding your tailoring order...`;
 			window.open(`https://wa.me/${customer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`, '_blank');
 		}
 	};
 
 	const handleEmail = () => {
 		if (customer?.email) {
-			const subject = 'Regarding your tailoring order - Arcseams';
+			const subject = 'Regarding your tailoring order - Seamly';
 			const body = `Hello ${customer.firstName},`;
 			window.location.href = `mailto:${customer.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 		}
@@ -115,10 +115,10 @@ export const CustomerProfileScreen = () => {
 		<div className="customer-profile-screen">
 			<div className="detail-header-row">
 				<button className="back-button" onClick={() => navigate('/clients')}>
-					<ArrowLeft size={20} /> Back to Clients
+					<ArrowLeft size={20} />
 				</button>
-				<button className="secondary" style={{ width: 'auto' }} onClick={() => setIsEditModalOpen(true)}>
-					<Edit3 size={18} /> Edit Profile
+				<button className="btn-subtle" onClick={() => setIsEditModalOpen(true)}>
+					<Edit3 size={16} /> Edit Profile
 				</button>
 			</div>
 

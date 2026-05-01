@@ -251,7 +251,7 @@ export const SettingsScreen = () => {
 				</div>
 
 				<div className="version-info" style={{ marginTop: '3rem', textAlign: 'center', opacity: 0.3, fontSize: '0.8rem' }}>
-					Arcseams Tailor Suite • v1.0.0 (Stable)
+					Seamly Tailor Suite • v1.0.0 (Stable)
 				</div>
 			</div>
 		</div>

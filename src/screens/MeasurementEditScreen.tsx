@@ -77,7 +77,7 @@ export const MeasurementEditScreen = () => {
 		<div className="measurement-edit-screen">
 			<div className="detail-header-row">
 				<button className="back-button" onClick={() => navigate(`/clients/${customerId}`)}>
-					<ArrowLeft size={20} /> Back to Profile
+					<ArrowLeft size={20} />
 				</button>
 				<button 
 					className="primary-btn" 
@@ -109,7 +109,10 @@ export const MeasurementEditScreen = () => {
 								<input 
 									type="text" 
 									value={measurements[m] || ''}
-									onChange={(e) => setMeasurements({ ...measurements, [m]: e.target.value })}
+									onChange={(e) => {
+										const val = e.target.value.replace(/[^0-9.]/g, '');
+										setMeasurements({ ...measurements, [m]: val });
+									}}
 									placeholder="0.0"
 								/>
 								<span className="unit-label">in</span>

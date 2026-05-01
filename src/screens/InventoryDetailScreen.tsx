@@ -70,24 +70,22 @@ export const InventoryDetailScreen = () => {
 		<div className="inventory-detail-screen">
 			<div className="detail-header-row">
 				<button className="back-button" onClick={() => navigate('/inventory')}>
-					<ArrowLeft size={20} /> Back to Inventory
+					<ArrowLeft size={20} />
 				</button>
-				<div className="flex gap-3">
+				<div className="flex gap-2">
 					<button 
-						className="secondary" 
-						style={{ width: 'auto' }}
+						className="btn-subtle" 
 						onClick={() => setIsEditing(!isEditing)}
 					>
-						{isEditing ? <ArrowLeft size={18} /> : <Edit3 size={18} />}
-						{isEditing ? 'Cancel Edit' : 'Edit Item'}
+						{isEditing ? <ArrowLeft size={16} /> : <Edit3 size={16} />}
+						{isEditing ? 'Cancel' : 'Edit'}
 					</button>
 					{!isEditing && (
 						<button 
-							className="secondary" 
-							style={{ width: 'auto', color: 'var(--danger-color)' }}
+							className="btn-ghost danger" 
 							onClick={handleDelete}
 						>
-							<Trash2 size={18} /> Delete
+							<Trash2 size={16} /> Delete
 						</button>
 					)}
 				</div>

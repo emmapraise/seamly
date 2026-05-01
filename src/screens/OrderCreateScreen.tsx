@@ -178,7 +178,7 @@ export const OrderCreateScreen = () => {
 		<div className="order-create-screen">
 			<div className="detail-header-row">
 				<button className="back-button" onClick={() => navigate(-1)}>
-					<ArrowLeft size={20} /> Back to Dashboard
+					<ArrowLeft size={20} />
 				</button>
 				<button type="submit" form="order-create-form" className="primary-btn" style={{ width: 'auto' }}>
 					<Eye size={18} /> Review & Finalize
@@ -262,7 +262,10 @@ export const OrderCreateScreen = () => {
 								<input
 									type="text"
 									value={formatNumber(formData.price)}
-									onChange={(e) => setFormData({ ...formData, price: e.target.value.replace(/,/g, '') })}
+									onChange={(e) => {
+										const val = e.target.value.replace(/[^0-9]/g, '');
+										setFormData({ ...formData, price: val });
+									}}
 									placeholder="0.00"
 									required
 								/>
@@ -287,7 +290,10 @@ export const OrderCreateScreen = () => {
 								<input
 									type="text"
 									value={formatNumber(formData.deposit)}
-									onChange={(e) => setFormData({ ...formData, deposit: e.target.value.replace(/,/g, '') })}
+									onChange={(e) => {
+										const val = e.target.value.replace(/[^0-9]/g, '');
+										setFormData({ ...formData, deposit: val });
+									}}
 									placeholder="Enter deposit"
 									required
 								/>
@@ -323,8 +329,8 @@ export const OrderCreateScreen = () => {
 							<select onChange={(e) => { if (e.target.value) addItem(e.target.value); e.target.value = ''; }}>
 								<option value="">Select inventory item...</option>
 								{inventory.map(item => (
-									<option key={item.id} value={item.id} disabled={item.qtyOnHand <= 0 && item.isDeductible !== false}>
-										{item.itemName} ({item.qtyOnHand || 0} {item.unit})
+									<option key={item.id} value={item.id} disabled={(item.qtyOnHand || item.quantity || 0) <= 0 && item.isDeductible !== false}>
+										{item.itemName || item.name} ({item.qtyOnHand || item.quantity || 0} {item.unit})
 									</option>
 								))}
 							</select>
@@ -333,7 +339,7 @@ export const OrderCreateScreen = () => {
 							{selectedItems.map((item, index) => (
 								<div key={item.id} className="material-item-row">
 									<div className="material-info">
-										<span className="name">{item.itemName}</span>
+										<span className="name">{item.itemName || item.name}</span>
 										<span className="stock">{item.unit}</span>
 									</div>
 									<div className="material-actions">
@@ -341,7 +347,10 @@ export const OrderCreateScreen = () => {
 											<input 
 												type="number" 
 												value={item.quantity} 
-												onChange={(e) => updateItemQty(index, parseFloat(e.target.value) || 0)}
+												onChange={(e) => {
+													const val = e.target.value.replace(/[^0-9.]/g, '');
+													updateItemQty(index, parseFloat(val) || 0);
+												}}
 												min="0.1"
 												step="0.1"
 											/>
@@ -401,7 +410,7 @@ export const OrderCreateScreen = () => {
 					</div>
 
 					<div className="review-footer-actions">
-						<button className="secondary-btn" onClick={() => setShowReview(false)}>Edit Order</button>
+						<button className="btn-subtle" onClick={() => setShowReview(false)}>Edit Order</button>
 						<button className="primary-btn" onClick={handleSubmit} disabled={isSubmitting}>
 							{isSubmitting ? <Loader2 className="animate-spin" size={20} /> : <><CheckCircle size={20} /> Create Order</>}
 						</button>

@@ -14,9 +14,10 @@ export const COLORS = {
 		success: '#2ECC71',
 		inputBg: '#F0F2F5',
 		card: '#FFFFFF',
-		whiteRGB: '255, 255, 255',
+		cardHover: '#F8FAFC',
 		border: '#F1F5F9',
 		muted: '#A0AEC0',
+		whiteRGB: '255, 255, 255',
 	},
 	dark: {
 		primary: '#D4AF37',
@@ -32,6 +33,7 @@ export const COLORS = {
 		success: '#34D399',
 		inputBg: '#334155',
 		card: '#1E293B',
+		cardHover: '#334155',
 		border: '#334155',
 		muted: '#94A3B8',
 	},
@@ -93,6 +95,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 		
 		root.style.setProperty('--bg-color', colors.background);
 		root.style.setProperty('--surface-color', colors.card);
+		root.style.setProperty('--surface-hover', colors.cardHover);
 		root.style.setProperty('--text-primary', colors.text);
 		root.style.setProperty('--text-secondary', colors.muted);
 		root.style.setProperty('--primary-color', colors.primary);
