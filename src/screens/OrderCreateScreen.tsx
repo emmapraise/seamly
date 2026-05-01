@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { orderApi, customerApi, inventoryApi, storageApi } from '../api';
-import { ArrowLeft, Save, Plus, Trash2, Package, Image as ImageIcon, Camera, Loader2, X, Eye, CheckCircle, Info } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2, Package, Image as ImageIcon, Camera, Loader2, X, Eye, CheckCircle, Info, Calendar } from 'lucide-react';
 import { formatNumber, parseFormattedNumber } from '../utils/formatters';
 import { Modal } from '../components/Modal';
 
