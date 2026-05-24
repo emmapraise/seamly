@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
-import { businessApi } from '../api';
+import { businessApi, notificationsApi } from '../api';
+import { messaging } from '../firebase';
+import { getToken } from 'firebase/messaging';
 import { 
   User, 
   Settings as SettingsIcon, 
@@ -91,6 +93,32 @@ export const SettingsScreen = () => {
 			fetchBusinessInfo();
 		}
 	}, [businessId]);
+
+	const handleNotificationToggle = async (enabled: boolean) => {
+		setNotificationsEnabled(enabled);
+		if (enabled && messaging) {
+			try {
+				const permission = await Notification.requestPermission();
+				if (permission === 'granted') {
+					const token = await getToken(messaging, {
+						vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY
+					});
+					if (token) {
+						await notificationsApi.updateToken(token);
+						console.log('Push token saved successfully.');
+					} else {
+						console.log('No registration token available.');
+					}
+				} else {
+					console.warn('Notification permission denied.');
+					setNotificationsEnabled(false);
+				}
+			} catch (err) {
+				console.error('An error occurred while retrieving token.', err);
+				setNotificationsEnabled(false);
+			}
+		}
+	};
 
 	const fetchBusinessInfo = async () => {
 		if (!businessId) return;
@@ -186,7 +214,7 @@ export const SettingsScreen = () => {
 							value="Alerts for orders and stock"
 							isSwitch={true}
 							switchValue={notificationsEnabled}
-							onSwitchChange={setNotificationsEnabled}
+							onSwitchChange={handleNotificationToggle}
 							color="#3B82F6"
 						/>
 						<SettingItem
