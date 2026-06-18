@@ -137,9 +137,11 @@ export const InventoryScreen = () => {
 					<h1 className="text-gradient">Inventory</h1>
 					<p>Track your materials and equipment stock</p>
 				</div>
-				<button className="primary-btn hide-mobile" style={{ width: 'auto' }} onClick={() => setIsModalOpen(true)}>
-					<Plus size={20} /> Add New Item
-				</button>
+				<div className="header-actions">
+					<button className="primary-btn hide-mobile" onClick={() => setIsModalOpen(true)}>
+						<Plus size={20} /> Add New Item
+					</button>
+				</div>
 			</header>
 
 			<div className="mobile-fab" onClick={() => setIsModalOpen(true)}>

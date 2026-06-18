@@ -36,10 +36,10 @@ export const PaymentsScreen = () => {
 
 	return (
 		<div className="payments-screen container-luxury">
-			<header className="page-header-luxury animate-fade-in">
+			<header className="page-header-luxury animate-fade-in" style={{ paddingTop: 0 }}>
 				<div>
-					<h1 className="text-gradient">Financial Ledger</h1>
-					<p>Audit trail for all production settlements and settlements</p>
+					<h2 className="text-gradient" style={{ fontSize: '1.8rem', margin: 0 }}>Financial Ledger</h2>
+					<p style={{ margin: '0.25rem 0 0' }}>Audit trail for all production settlements</p>
 				</div>
 				<div className="revenue-summary-modern glass-card">
 					<div className="rev-icon">

@@ -169,12 +169,17 @@ button {
   background: var(--primary-color);
   color: white;
   border: none;
-  padding: 0.875rem 1.5rem;
-  border-radius: 12px;
+  padding: 0.85rem 1.5rem;
+  border-radius: 14px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.95rem;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
 }
 
 button:hover {
@@ -197,6 +202,11 @@ button:active {
   background: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-primary);
+  box-shadow: none;
+}
+
+.secondary-btn:hover {
+  background: var(--surface-hover);
 }
 
 button.secondary {
@@ -204,6 +214,10 @@ button.secondary {
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   box-shadow: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 button.secondary:hover {
@@ -2606,6 +2620,240 @@ input[type="date"]::after {
   font-size: 0.95rem;
 }
 
+/* Google Auth styling */
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: var(--surface-color);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.85rem 1.5rem;
+  border-radius: 14px;
+  font-weight: 700;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.google-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.auth-divider:not(:empty)::before {
+  margin-right: .5em;
+}
+
+.auth-divider:not(:empty)::after {
+  margin-left: .5em;
+}
+
+/* Contact Picker Mock / Review UI styling */
+.contact-picker-simulator {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.contact-simulator-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.contact-simulator-item:last-child {
+  border-bottom: none;
+}
+
+.contact-simulator-item:hover {
+  background: var(--surface-hover);
+}
+
+.contact-checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.contact-checkbox-custom.checked {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.contact-avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(15, 28, 63, 0.05);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.contact-simulator-info {
+  flex: 1;
+}
+
+.contact-simulator-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.15rem;
+}
+
+.contact-simulator-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.contact-review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.contact-review-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--surface-color);
+}
+
+.contact-review-info {
+  flex: 1;
+}
+
+.contact-review-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr 1.5fr auto;
+  gap: 0.75rem;
+  flex: 1;
+  align-items: center;
+}
+
+.gender-toggle-pill {
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 36px;
+}
+
+.gender-toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  width: auto;
+  box-shadow: none;
+}
+
+.gender-toggle-btn.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Modal sizes & layout */
+.modal-content.modal-lg {
+  max-width: 850px;
+}
+
+.modal-content.modal-xl {
+  max-width: 1050px;
+}
+
+.modal-footer-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.modal-footer-btns button {
+  width: auto !important;
+  min-width: 120px;
+  padding: 0.85rem 1.5rem;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .contact-review-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .contact-review-inputs {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .contact-review-list {
+    max-height: 250px;
+  }
+  
+  .modal-footer-btns {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+  
+  .modal-footer-btns button {
+    width: 100% !important;
+  }
+}
+
 /* Sidebar & Navigation Luxury UI — consolidated, no duplicate display rules */
 .sidebar-header {
   margin-bottom: 3rem;
@@ -5003,6 +5251,49 @@ input[type="date"]::after {
     grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
   }
+
+  /* Orders Hub Header Wrapping */
+  .orders-screen-container > header.flex-between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .orders-screen-container > header.flex-between .primary-btn {
+    width: 100%;
+  }
+
+  /* Ledger Actions Row */
+  .table-actions-row-modern {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .table-actions-row-modern .filter-group {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .table-actions-row-modern .filter-group button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* Checkout Mobile Layouts */
+  .checkout-order-card-modern {
+    flex-wrap: wrap;
+  }
+  .checkout-order-card-modern .order-pricing-v2 {
+    margin-left: auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+  .dark .checkout-order-card-modern .order-pricing-v2 {
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
 }
 
 /* Sidebar nav text visibility for web */
@@ -5031,5 +5322,40 @@ input[type="date"]::after {
   }
   .measurements-input-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Unified alignments & header actions */
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.header-actions button,
+header button {
+  width: auto !important;
+}
+
+/* Eliminate bottom margin from headers & titles inside flex layout rows */
+.flex-between .group-title,
+.flex-between h3,
+.flex-between h1,
+.flex-between h2 {
+  margin: 0 !important;
+}
+
+/* Responsive inner tab layout stack */
+@media (max-width: 768px) {
+  .measurements-tab .flex-between,
+  .orders-tab .flex-between {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 1rem;
+  }
+
+  .measurements-tab .flex-between .primary-btn,
+  .orders-tab .flex-between .primary-btn {
+    width: 100% !important;
   }
 }

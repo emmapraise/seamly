@@ -151,9 +151,11 @@ export const CustomerProfileScreen = () => {
 						<button className="circle-action-btn" onClick={handleEmail} title="Email">
 							<Mail size={22} />
 						</button>
-						<button className="primary-btn" style={{ width: 'auto' }} onClick={() => navigate(`/orders/new?customerId=${id}`)}>
-							<Plus size={20} /> New Order
-						</button>
+						<div className="header-actions">
+							<button className="primary-btn" onClick={() => navigate(`/orders/new?customerId=${id}`)}>
+								<Plus size={20} /> New Order
+							</button>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -175,7 +177,7 @@ export const CustomerProfileScreen = () => {
 				</div>
 				<button 
 					className="checkout-trigger-btn"
-					onClick={() => navigate(`/checkout?customerId=${id}`)}
+					onClick={() => navigate(`/orders?tab=checkout&customerId=${id}`)}
 					disabled={orders.filter(o => (o.balance || (o.price - (o.deposit || 0))) > 0).length === 0}
 				>
 					<CreditCard size={18} /> Settle Outstanding
@@ -239,9 +241,11 @@ export const CustomerProfileScreen = () => {
 					<div className="measurements-tab">
 						<div className="flex-between" style={{ marginBottom: '2rem' }}>
 							<h3 className="group-title"><Ruler size={20} /> Full Measurement Set</h3>
-							<button className="primary-btn" style={{ width: 'auto' }} onClick={() => navigate(`/clients/${id}/measurements/edit`)}>
-								<Plus size={18} /> Update Data
-							</button>
+							<div className="header-actions">
+								<button className="primary-btn" onClick={() => navigate(`/clients/${id}/measurements/edit`)}>
+									<Plus size={18} /> Update Data
+								</button>
+							</div>
 						</div>
 						<div className="measurement-grid-luxury">
 							{Object.entries(measurements[0]?.data || {}).map(([key, val]) => (
@@ -258,9 +262,11 @@ export const CustomerProfileScreen = () => {
 					<div className="orders-tab">
 						<div className="flex-between" style={{ marginBottom: '2rem' }}>
 							<h3 className="group-title"><ShoppingBag size={20} /> Client Orders</h3>
-							<button className="primary-btn" style={{ width: 'auto' }} onClick={() => navigate(`/orders/new?customerId=${id}`)}>
-								<Plus size={18} /> Create New
-							</button>
+							<div className="header-actions">
+								<button className="primary-btn" onClick={() => navigate(`/orders/new?customerId=${id}`)}>
+									<Plus size={18} /> Create New
+								</button>
+							</div>
 						</div>
 						<div className="grid">
 							{orders.map(order => (

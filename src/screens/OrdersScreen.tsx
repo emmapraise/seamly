@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { orderApi, customerApi } from '../api';
-import { ShoppingBag, Plus, Search, Filter, ChevronRight, Calendar, User, DollarSign } from 'lucide-react';
+import { ShoppingBag, Plus, Search, Filter, ChevronRight, Calendar, User, DollarSign, ShoppingCart, Banknote } from 'lucide-react';
+import { CheckoutScreen } from './CheckoutScreen';
+import { PaymentsScreen } from './PaymentsScreen';
 
 export const OrdersScreen = () => {
 	const navigate = useNavigate();
+	const [searchParams, setSearchParams] = useSearchParams();
+	const activeTab = searchParams.get('tab') || 'production';
 	const [orders, setOrders] = useState<any[]>([]);
 	const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
 	const [searchQuery, setSearchQuery] = useState('');
@@ -69,13 +73,42 @@ export const OrdersScreen = () => {
 		<div className="orders-screen-container">
 			<header className="flex-between" style={{ marginBottom: '2.5rem' }}>
 				<div>
-					<h1 className="text-gradient" style={{ fontSize: '2.5rem', marginBottom: '0.25rem' }}>Production Orders</h1>
-					<p>Manage and track all active tailoring jobs</p>
+					<h1 className="text-gradient" style={{ fontSize: '2.5rem', marginBottom: '0.25rem' }}>Orders</h1>
+					<p>Manage active jobs, checkouts, and financial ledger</p>
 				</div>
-				<button className="primary-btn hide-mobile" style={{ width: 'auto' }} onClick={() => navigate('/orders/new')}>
-					<Plus size={18} /> Create New Job
-				</button>
+				{activeTab === 'production' && (
+					<div className="header-actions">
+						<button className="primary-btn hide-mobile" onClick={() => navigate('/orders/new')}>
+							<Plus size={18} /> Create New Job
+						</button>
+					</div>
+				)}
 			</header>
+
+			<div className="tabs-luxury" style={{ marginBottom: '2rem' }}>
+				<button 
+					className={`tab-luxury-btn ${activeTab === 'production' ? 'active' : ''}`}
+					onClick={() => setSearchParams({ tab: 'production' })}
+				>
+					<ShoppingBag size={16} style={{ display: 'inline', marginRight: '6px' }} /> Production
+				</button>
+				<button 
+					className={`tab-luxury-btn ${activeTab === 'checkout' ? 'active' : ''}`}
+					onClick={() => setSearchParams({ tab: 'checkout' })}
+				>
+					<ShoppingCart size={16} style={{ display: 'inline', marginRight: '6px' }} /> Checkout
+				</button>
+				<button 
+					className={`tab-luxury-btn ${activeTab === 'payments' ? 'active' : ''}`}
+					onClick={() => setSearchParams({ tab: 'payments' })}
+				>
+					<Banknote size={16} style={{ display: 'inline', marginRight: '6px' }} /> Ledger
+				</button>
+			</div>
+
+			<div className="tab-body">
+				{activeTab === 'production' && (
+					<>
 
 			<div className="search-filter-section card" style={{ padding: '1rem', marginBottom: '2rem', borderRadius: '20px' }}>
 				<div className="flex items-center gap-3" style={{ flexWrap: 'wrap' }}>
@@ -176,6 +209,11 @@ export const OrdersScreen = () => {
 					))}
 				</div>
 			)}
+			</>
+			)}
+			{activeTab === 'checkout' && <CheckoutScreen />}
+			{activeTab === 'payments' && <PaymentsScreen />}
+			</div>
 		</div>
 	);
 };

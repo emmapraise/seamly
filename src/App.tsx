@@ -50,8 +50,8 @@ const AppContent = () => {
 				<Route path="inventory" element={<InventoryScreen />} />
 				<Route path="inventory/:id" element={<InventoryDetailScreen />} />
 				<Route path="settings" element={<SettingsScreen />} />
-				<Route path="checkout" element={<CheckoutScreen />} />
-				<Route path="payments" element={<PaymentsScreen />} />
+				<Route path="checkout" element={<Navigate to="/orders?tab=checkout" replace />} />
+				<Route path="payments" element={<Navigate to="/orders?tab=payments" replace />} />
 			</Route>
 		</Routes>
 	);

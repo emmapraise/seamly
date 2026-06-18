@@ -87,9 +87,9 @@ export const OrderDetailScreen = () => {
 
 	const handleCheckoutToggle = () => {
 		if (order?.customerId) {
-			navigate(`/checkout?customerId=${order.customerId}`);
+			navigate(`/orders?tab=checkout&customerId=${order.customerId}`);
 		} else {
-			navigate('/checkout');
+			navigate('/orders?tab=checkout');
 		}
 	};
 

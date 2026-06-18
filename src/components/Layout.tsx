@@ -9,8 +9,6 @@ export const Layout = () => {
 	const links = [
 		{ path: '/', label: 'Dashboard', icon: <Home size={22} /> },
 		{ path: '/orders', label: 'Orders', icon: <ShoppingBag size={22} /> },
-		{ path: '/checkout', label: 'Checkout', icon: <ShoppingCart size={22} /> },
-		{ path: '/payments', label: 'Payments', icon: <Banknote size={22} /> },
 		{ path: '/clients', label: 'Clients', icon: <Users size={22} /> },
 		{ path: '/inventory', label: 'Inventory', icon: <Package size={22} /> },
 		{ path: '/settings', label: 'Settings', icon: <SettingsIcon size={22} /> },
