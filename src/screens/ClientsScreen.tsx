@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { customerApi, measurementApi, storageApi } from '../api';
 import { Plus, User, Phone, Mail, ChevronRight, MessageSquare, Camera, Loader2, Ruler, MapPin, Search, Check } from 'lucide-react';
 import { Modal } from '../components/Modal';
-import { formatNumber, parseFormattedNumber } from '../utils/formatters';
+import { formatNumber, parseFormattedNumber, formatWhatsAppNumber } from '../utils/formatters';
 
 export const ClientsScreen = () => {
 	const navigate = useNavigate();
@@ -608,7 +608,7 @@ export const ClientsScreen = () => {
 										style={{ width: '40px', height: '40px', color: '#25D366' }}
 										onClick={(e) => {
 											e.stopPropagation();
-											window.open(`https://wa.me/${client.phone?.replace(/\D/g, '')}`, '_blank');
+											window.open(`https://wa.me/${formatWhatsAppNumber(client.phone || '')}`, '_blank');
 										}}
 									>
 										<MessageSquare size={18} />

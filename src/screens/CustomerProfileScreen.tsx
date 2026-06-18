@@ -20,6 +20,7 @@ import {
   CreditCard
 } from 'lucide-react';
 import { Modal } from '../components/Modal';
+import { formatWhatsAppNumber } from '../utils/formatters';
 
 export const CustomerProfileScreen = () => {
 	const { id } = useParams<{ id: string }>();
@@ -96,7 +97,7 @@ export const CustomerProfileScreen = () => {
 	const handleWhatsApp = () => {
 		if (customer?.phone) {
 			const message = `Hello ${customer.firstName}, this is Seamly regarding your tailoring order...`;
-			window.open(`https://wa.me/${customer.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`, '_blank');
+			window.open(`https://wa.me/${formatWhatsAppNumber(customer.phone)}?text=${encodeURIComponent(message)}`, '_blank');
 		}
 	};
 
