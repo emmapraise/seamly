@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { customerApi, measurementApi, storageApi } from '../api';
-import { Plus, User, Phone, Mail, ChevronRight, MessageSquare, Camera, Loader2, Ruler, MapPin, Search } from 'lucide-react';
+import { Plus, User, Phone, Mail, ChevronRight, MessageSquare, Camera, Loader2, Ruler, MapPin, Search, Check } from 'lucide-react';
 import { Modal } from '../components/Modal';
 import { formatNumber, parseFormattedNumber } from '../utils/formatters';
 
@@ -27,6 +27,119 @@ export const ClientsScreen = () => {
 
 	const [gender, setGender] = useState<'Male' | 'Female'>('Female');
 	const [measurements, setMeasurements] = useState<Record<string, string>>({});
+
+	// Contact Import States
+	const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
+	const [isReviewOpen, setIsReviewOpen] = useState(false);
+	const [selectedReviewContacts, setSelectedReviewContacts] = useState<any[]>([]);
+	const [simulatorSelections, setSimulatorSelections] = useState<Record<number, boolean>>({});
+	const [isImporting, setIsImporting] = useState(false);
+
+	const MOCK_CONTACTS = [
+		{ name: ['Aisha Bello'], email: ['aisha.bello@example.com'], tel: ['+234 803 123 4567'] },
+		{ name: ['Chinedu Okeke'], email: ['chinedu.okeke@example.com'], tel: ['+234 812 345 6789'] },
+		{ name: ['Kofi Mensah'], email: ['kofi.mensah@ghana.com'], tel: ['+233 24 123 4567'] },
+		{ name: ['Sarah Jenkins'], email: ['sarah.j@outlook.com'], tel: ['+1 555 234 5678'] },
+		{ name: ['Michael Carter'], email: ['m.carter@company.com'], tel: ['+44 7911 123456'] },
+		{ name: ['Fatima Yusuf'], email: ['fatima.yusuf@gmail.com'], tel: ['+234 905 555 4321'] },
+		{ name: ['Emeka Nwosu'], email: ['emeka.nwosu@example.com'], tel: ['+234 703 987 6543'] }
+	];
+
+	const parseContact = (contact: any) => {
+		const fullName = contact.name && contact.name[0] ? contact.name[0] : 'Unnamed';
+		const email = contact.email && contact.email[0] ? contact.email[0] : '';
+		const phone = contact.tel && contact.tel[0] ? contact.tel[0] : '';
+		
+		const nameParts = fullName.trim().split(/\s+/);
+		const firstName = nameParts[0] || 'Imported';
+		const lastName = nameParts.slice(1).join(' ') || 'Contact';
+
+		return {
+			firstName,
+			lastName,
+			email,
+			phone,
+			gender: 'Female' as 'Male' | 'Female',
+			selected: true,
+		};
+	};
+
+	const handleImportContactsClick = async () => {
+		const isContactPickerSupported = typeof navigator !== 'undefined' && 
+			'contacts' in navigator && 
+			typeof (navigator as any).contacts.select === 'function';
+
+		if (isContactPickerSupported) {
+			try {
+				const props = ['name', 'email', 'tel'];
+				const contacts = await (navigator as any).contacts.select(props, { multiple: true });
+				if (contacts && contacts.length > 0) {
+					const parsed = contacts.map(parseContact);
+					setSelectedReviewContacts(parsed);
+					setIsReviewOpen(true);
+				}
+			} catch (err: any) {
+				console.error('Error selecting native contacts', err);
+			}
+		} else {
+			setSimulatorSelections({});
+			setIsSimulatorOpen(true);
+		}
+	};
+
+	const toggleSimulatorSelection = (idx: number) => {
+		setSimulatorSelections(prev => ({
+			...prev,
+			[idx]: !prev[idx]
+		}));
+	};
+
+	const handleProceedFromSimulator = () => {
+		const selected = MOCK_CONTACTS.filter((_, idx) => simulatorSelections[idx])
+			.map(parseContact);
+		if (selected.length === 0) {
+			alert('Please select at least one contact.');
+			return;
+		}
+		setSelectedReviewContacts(selected);
+		setIsSimulatorOpen(false);
+		setIsReviewOpen(true);
+	};
+
+	const toggleReviewSelection = (idx: number) => {
+		setSelectedReviewContacts(prev => prev.map((c, i) => i === idx ? { ...c, selected: !c.selected } : c));
+	};
+
+	const updateReviewContact = (idx: number, field: string, value: any) => {
+		setSelectedReviewContacts(prev => prev.map((c, i) => i === idx ? { ...c, [field]: value } : c));
+	};
+
+	const handleBulkImport = async () => {
+		const toImport = selectedReviewContacts.filter(c => c.selected);
+		if (toImport.length === 0) return;
+
+		setIsImporting(true);
+		try {
+			await Promise.all(toImport.map(client => 
+				customerApi.create({
+					firstName: client.firstName,
+					lastName: client.lastName,
+					email: client.email,
+					phone: client.phone,
+					gender: client.gender === 'Male' ? 'MALE' : 'FEMALE',
+					profilePicture: '',
+					location: '',
+					createdAt: new Date().toISOString(),
+				})
+			));
+			setIsReviewOpen(false);
+			loadClients();
+		} catch (error) {
+			console.error('Failed to import clients', error);
+		} finally {
+			setIsImporting(false);
+		}
+	};
 
 	useEffect(() => {
 		loadClients();
@@ -143,12 +256,24 @@ export const ClientsScreen = () => {
 					<h1 className="text-gradient">Clients</h1>
 					<p>Search and manage your customer profiles</p>
 				</div>
-				<button className="primary-btn hide-mobile" style={{ width: 'auto' }} onClick={() => setIsModalOpen(true)}>
-					<Plus size={20} /> Add New Client
-				</button>
+				<div className="header-actions">
+					<button 
+						className="secondary-btn hide-mobile" 
+						onClick={handleImportContactsClick}
+					>
+						<User size={18} /> Import Contacts
+					</button>
+					<button className="primary-btn hide-mobile" onClick={() => setIsModalOpen(true)}>
+						<Plus size={20} /> Add New Client
+					</button>
+				</div>
 			</header>
 
-			<div className="mobile-fab" onClick={() => setIsModalOpen(true)}>
+			<div className="mobile-fab" style={{ bottom: '180px', background: 'var(--surface-color)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }} onClick={handleImportContactsClick} title="Import Contacts">
+				<User size={24} />
+			</div>
+
+			<div className="mobile-fab" onClick={() => setIsModalOpen(true)} title="Add Client">
 				<Plus size={24} />
 			</div>
 
@@ -287,6 +412,168 @@ export const ClientsScreen = () => {
 						</button>
 					</div>
 				</form>
+			</Modal>
+
+			{/* Contact Picker Simulator Modal */}
+			<Modal 
+				isOpen={isSimulatorOpen} 
+				onClose={() => setIsSimulatorOpen(false)} 
+				title="Import Contacts (Simulation)"
+				size="lg"
+			>
+				<p style={{ fontSize: '0.9rem', opacity: 0.7, marginBottom: '1rem' }}>
+					Your current browser/device does not support the native Contact Picker API. We've loaded simulated contacts so you can test the multi-select import flow.
+				</p>
+				
+				<div className="contact-picker-simulator">
+					{MOCK_CONTACTS.map((contact, idx) => {
+						const fullName = contact.name[0];
+						const initials = fullName.split(' ').map(n => n[0]).join('');
+						const isSelected = !!simulatorSelections[idx];
+						return (
+							<div 
+								key={idx} 
+								className="contact-simulator-item"
+								onClick={() => toggleSimulatorSelection(idx)}
+							>
+								<div className={`contact-checkbox-custom ${isSelected ? 'checked' : ''}`}>
+									{isSelected && <Check size={12} />}
+								</div>
+								
+								<div className="contact-avatar-placeholder">
+									{initials}
+								</div>
+								
+								<div className="contact-simulator-info">
+									<div className="contact-simulator-name">{fullName}</div>
+									<div className="contact-simulator-meta">
+										<span>{contact.tel[0]}</span>
+										{contact.email[0] && <span style={{ marginLeft: '1rem' }}>{contact.email[0]}</span>}
+									</div>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+				
+				<div className="modal-footer-btns">
+					<button 
+						className="secondary-btn" 
+						onClick={() => setIsSimulatorOpen(false)}
+					>
+						Cancel
+					</button>
+					<button 
+						className="primary-btn" 
+						onClick={handleProceedFromSimulator}
+					>
+						Proceed to Review
+					</button>
+				</div>
+			</Modal>
+
+			{/* Import Review Modal */}
+			<Modal
+				isOpen={isReviewOpen}
+				onClose={() => setIsReviewOpen(false)}
+				title={`Review and Import Clients (${selectedReviewContacts.filter(c => c.selected).length} selected)`}
+				size="lg"
+			>
+				<p style={{ fontSize: '0.9rem', opacity: 0.7, marginBottom: '1.5rem' }}>
+					Confirm or update the details of the contacts you want to add as clients. You can set their gender to configure their initial measurement fields.
+				</p>
+				
+				<div className="contact-review-list">
+					{selectedReviewContacts.map((c, idx) => (
+						<div key={idx} className="contact-review-row">
+							<div 
+								className={`contact-checkbox-custom ${c.selected ? 'checked' : ''}`}
+								onClick={() => toggleReviewSelection(idx)}
+								style={{ cursor: 'pointer' }}
+							>
+								{c.selected && <Check size={12} />}
+							</div>
+							
+							<div className="contact-review-inputs">
+								<div className="input-group" style={{ margin: 0, flex: 1 }}>
+									<input 
+										type="text" 
+										value={c.firstName} 
+										placeholder="First Name" 
+										onChange={(e) => updateReviewContact(idx, 'firstName', e.target.value)} 
+										required={c.selected}
+									/>
+								</div>
+								<div className="input-group" style={{ margin: 0, flex: 1 }}>
+									<input 
+										type="text" 
+										value={c.lastName} 
+										placeholder="Last Name" 
+										onChange={(e) => updateReviewContact(idx, 'lastName', e.target.value)} 
+										required={c.selected}
+									/>
+								</div>
+								<div className="input-group" style={{ margin: 0, flex: 1.2 }}>
+									<input 
+										type="tel" 
+										value={c.phone} 
+										placeholder="Phone" 
+										onChange={(e) => updateReviewContact(idx, 'phone', e.target.value)} 
+										required={c.selected}
+									/>
+								</div>
+								<div className="input-group" style={{ margin: 0, flex: 1.5 }}>
+									<input 
+										type="email" 
+										value={c.email} 
+										placeholder="Email (Optional)" 
+										onChange={(e) => updateReviewContact(idx, 'email', e.target.value)} 
+									/>
+								</div>
+								
+								<div className="gender-toggle-pill" style={{ flexShrink: 0 }}>
+									<button 
+										type="button" 
+										className={`gender-toggle-btn ${c.gender === 'Female' ? 'active' : ''}`}
+										onClick={() => updateReviewContact(idx, 'gender', 'Female')}
+										style={{ height: '100%' }}
+									>
+										Female
+									</button>
+									<button 
+										type="button" 
+										className={`gender-toggle-btn ${c.gender === 'Male' ? 'active' : ''}`}
+										onClick={() => updateReviewContact(idx, 'gender', 'Male')}
+										style={{ height: '100%' }}
+									>
+										Male
+									</button>
+								</div>
+							</div>
+						</div>
+					))}
+				</div>
+				
+				<div className="modal-footer-btns">
+					<button 
+						className="secondary-btn" 
+						onClick={() => setIsReviewOpen(false)}
+						disabled={isImporting}
+					>
+						Cancel
+					</button>
+					<button 
+						className="primary-btn" 
+						onClick={handleBulkImport}
+						disabled={isImporting || selectedReviewContacts.filter(c => c.selected).length === 0}
+					>
+						{isImporting ? (
+							<><Loader2 className="animate-spin" size={16} /> Importing...</>
+						) : (
+							`Import Selected Clients`
+						)}
+					</button>
+				</div>
 			</Modal>
 
 			{filteredClients.length === 0 ? (

@@ -20,6 +20,8 @@ import {
 import {
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
+	GoogleAuthProvider,
+	signInWithPopup,
 } from 'firebase/auth';
 
 let currentBusinessId: string | null = null;
@@ -125,6 +127,62 @@ export const authApi = {
 				...userData,
 			},
 			businessId: businessRef.id,
+		});
+	},
+	loginWithGoogle: async () => {
+		const provider = new GoogleAuthProvider();
+		const userCredential = await signInWithPopup(auth, provider);
+		
+		const userDocRef = doc(db, 'users', userCredential.user.uid);
+		const userDoc = await getDoc(userDocRef);
+		let userData = userDoc.data();
+		let businessId = userData?.businessId;
+
+		if (!userData) {
+			const displayName = userCredential.user.displayName || '';
+			const nameParts = displayName.split(' ');
+			const firstName = nameParts[0] || 'Google';
+			const lastName = nameParts.slice(1).join(' ') || 'User';
+
+			const businessRef = await addDoc(collection(db, 'businesses'), {
+				name: `${firstName}'s Luxury Studio`,
+				ownerId: userCredential.user.uid,
+				createdAt: new Date().toISOString(),
+			});
+
+			userData = {
+				firstName,
+				lastName,
+				businessId: businessRef.id,
+				role: 'owner',
+			};
+
+			await setDoc(userDocRef, userData);
+			businessId = businessRef.id;
+		}
+
+		if (!businessId) {
+			console.log('BusinessId missing from user doc, searching businesses collection...');
+			const q = query(collection(db, 'businesses'), where('ownerId', '==', userCredential.user.uid));
+			const businessSnap = await getDocs(q);
+			if (!businessSnap.empty) {
+				businessId = businessSnap.docs[0].id;
+				console.log('Found owned business:', businessId);
+				await updateDoc(userDocRef, { businessId });
+			} else {
+				businessId = 'default-business-id';
+				console.warn('No business found for user. Using default:', businessId);
+			}
+		}
+
+		return toAxiosResponse({
+			access_token: await userCredential.user.getIdToken(),
+			user: {
+				id: userCredential.user.uid,
+				email: userCredential.user.email,
+				...userData,
+			},
+			businessId: businessId,
 		});
 	},
 };

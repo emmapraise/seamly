@@ -103,7 +103,7 @@ export const CheckoutScreen = () => {
 			});
 
 			alert('Payment successful! Order balances have been updated.');
-			navigate('/payments');
+			navigate('/orders?tab=payments');
 		} catch (error) {
 			console.error('Payment failed', error);
 			alert('Failed to process payment.');
@@ -114,13 +114,10 @@ export const CheckoutScreen = () => {
 
 	return (
 		<div className="checkout-screen-v2 container-luxury">
-			<header className="page-header-luxury animate-fade-in">
+			<header className="page-header-luxury animate-fade-in" style={{ paddingTop: 0 }}>
 				<div>
-					<button className="back-button" onClick={() => navigate(-1)} style={{ marginBottom: '1rem' }}>
-						<ArrowLeft size={20} />
-					</button>
-					<h1 className="text-gradient">Studio Settlement</h1>
-					<p>Finalize production jobs and process client payments</p>
+					<h2 className="text-gradient" style={{ fontSize: '1.8rem', margin: 0 }}>Studio Settlement</h2>
+					<p style={{ margin: '0.25rem 0 0' }}>Finalize production jobs and process client payments</p>
 				</div>
 				<div className="header-badge hide-mobile">
 					<ShieldCheck size={20} />
